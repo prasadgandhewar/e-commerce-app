@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class OrderController {
 
-    @GetMapping("/orders")
+    @GetMapping("/orders/list")
     public ResponseEntity<String> getOrders() {
         return ResponseEntity.ok("This is from order service.");
     }
