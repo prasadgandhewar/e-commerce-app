@@ -7,22 +7,26 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8085/realms/microservices-realm
-    cloud:
-      gateway:
-        routes:
-          - id: user-service
-            uri: http://localhost:8000 #User
-            predicates:
-              - Path=/users/**
-          - id: order-service
-            uri: http://localhost:8100 #Order
-            predicates:
-              - Path=/orders/**
-          - id: order-service
-            uri: http://localhost:8300 #Product
-            predicates:
-              - Path=/products/**
+          issuer-uri: http://localhost:8080/realms/springboot-microservice-realm
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: user-service
+              uri: http://localhost:8000 #User
+              predicates:
+                - Path=/users/**
+            - id: order-service
+              uri: http://localhost:8100 #Order
+              predicates:
+                - Path=/orders/**
+            - id: product-service
+              uri: http://localhost:8300 #Product
+              predicates:
+                - Path=/products/**
 eureka:
   client:
     serviceUrl:
