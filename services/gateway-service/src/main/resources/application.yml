@@ -3,13 +3,13 @@ server:
 spring:
   application:
     name: gateway-service
+#  main:
+#    allow-bean-definition-overriding: true
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8080/realms/springboot-microservice-realm
-  main:
-    allow-bean-definition-overriding: true
   cloud:
     gateway:
       server:
