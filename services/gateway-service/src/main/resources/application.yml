@@ -10,32 +10,31 @@ spring:
           issuer-uri: http://localhost:8085/realms/microservices-realm
   main:
     allow-bean-definition-overriding: true
-#  cloud:
-#    gateway:
-#      server:
-#        webflux:
-#          discovery:
-#            locator:
-#              enabled: true
-#              lower-case-service-id: true
   cloud:
     gateway:
       server:
         webflux:
           routes:
             - id: user-service
-              uri: http://localhost:8000 #User
+              uri: lb://user-service #User
               predicates:
                 - Path=/users/**
             - id: order-service
-              uri: http://localhost:8100 #Order
+              uri: lb://order-service #Order
               predicates:
                 - Path=/orders/**
             - id: product-service
-              uri: http://localhost:8300 #Product
+              uri: lb://product-service #Product
               predicates:
                 - Path=/products/**
-#eureka:
-#  client:
-#    serviceUrl:
-#      defaultZone: http://localhost:8761/eureka/
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
