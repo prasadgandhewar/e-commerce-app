@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/prasadgandhewar/ecomm-configs
+          clone-on-start: true
+          default-label: main
+      discovery:
+        enabled: true
+        service-id: CONFIG-SERVER
+server:
+  port: 8500
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
