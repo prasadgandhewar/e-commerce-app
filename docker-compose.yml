@@ -1,32 +1,54 @@
 services:
-  keycloak:
-    image: quay.io/keycloak/keycloak:26.2.5
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres/keycloak
-      KC_DB_USERNAME: keycloak
-      KC_DB_PASSWORD: password
-      KC_HOSTNAME: localhost
-    ports:
-      - "8085:8080"
-    command: start-dev
-    depends_on:
-      - postgres
-    networks:
-      - keycloak-network
+  # keycloak:
+  #   image: quay.io/keycloak/keycloak:26.2.5
+  #   environment:
+  #     KEYCLOAK_ADMIN: admin
+  #     KEYCLOAK_ADMIN_PASSWORD: admin
+  #     KC_DB: postgres
+  #     KC_DB_URL: jdbc:postgresql://postgres/keycloak
+  #     KC_DB_USERNAME: keycloak
+  #     KC_DB_PASSWORD: password
+  #     KC_HOSTNAME: localhost
+  #   ports:
+  #     - "8085:8080"
+  #   command: start-dev
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - keycloak-network
 
-  postgres:
-    image: postgres:13
+  # postgres:
+  #   image: postgres:13
+  #   environment:
+  #     POSTGRES_DB: keycloak
+  #     POSTGRES_USER: keycloak
+  #     POSTGRES_PASSWORD: password
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - keycloak-network
+
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
     environment:
-      POSTGRES_DB: keycloak
-      POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - keycloak-network
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  # kafka:
+  #   image: bitnami/kafka:latest
+  #   container_name: kafka
+  #   ports:
+  #     - "9092:9092"
+  #   environment:
+  #     - KAFKA_BROKER_ID=1
+  #     - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+  #     - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+  #     - KAFKA_CFG_LISTENERS=PLAINTEXT://0.0.0.0:9092
+  #     - ALLOW_PLAINTEXT_LISTENER=yes
+  #   depends_on:
+  #     - zookeeper
 
 networks:
   keycloak-network:
