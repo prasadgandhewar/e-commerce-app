@@ -16,4 +16,5 @@ public class ProductController {
     public ResponseEntity<String> getProducts() {
         return ResponseEntity.ok("This is from product service- " + count);
     }
+
 }

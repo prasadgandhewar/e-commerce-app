@@ -1,5 +1,6 @@
 package com.ecomm.project.order_service.controller;
 
+import com.ecomm.project.order_service.kafka.OrderEventPublisher;
 import com.ecomm.project.order_service.proxy.ProductServiceProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,10 +22,19 @@ public class OrderController {
     @Autowired
     private ProductServiceProxy productProxy;
 
+    @Autowired
+    private OrderEventPublisher orderEventPublisher;
+
     @GetMapping("/orders/list")
     public ResponseEntity<String> getOrders() {
         String products = productProxy.getProducts().getBody();
         String orders = "This is from order service count - "+ count;
         return ResponseEntity.ok(orders + "\n" + products);
+    }
+
+    @GetMapping("/orders/publish")
+    public ResponseEntity<String> publishOrder() {
+        orderEventPublisher.publishOrderEvent("{'name': 'test'}");
+        return ResponseEntity.ok("Done!!!!");
     }
 }
