@@ -17,16 +17,16 @@ services:
   #   networks:
   #     - keycloak-network
 
-  # postgres:
-  #   image: postgres:13
-  #   environment:
-  #     POSTGRES_DB: keycloak
-  #     POSTGRES_USER: keycloak
-  #     POSTGRES_PASSWORD: password
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   networks:
-  #     - keycloak-network
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - keycloak-network
 
   # zookeeper:
   #   image: bitnami/zookeeper:latest
@@ -35,10 +35,10 @@ services:
   #     - "2181:2181"
   #   environment:
   #     - ALLOW_ANONYMOUS_LOGIN=yes
-  redis:
-    image: redis:latest
-    ports:
-      - "6379:6379"
+  # redis:
+  #   image: redis:latest
+  #   ports:
+  #     - "6379:6379"
   # kafka:
   #   image: bitnami/kafka:latest
   #   container_name: kafka
@@ -56,12 +56,21 @@ services:
   #   volumes:
   #     - kafka_data:/bitnami/kafka
 
-volumes:
-  kafka_data:
-
-# networks:
-#   keycloak-network:
-#     driver: bridge
+  postgresdb:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    ports:
+      - "5433:5432"
 
 # volumes:
-#   postgres_data:
+#   kafka_data:
+
+networks:
+  keycloak-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
