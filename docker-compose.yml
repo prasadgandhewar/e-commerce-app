@@ -17,16 +17,16 @@ services:
   #   networks:
   #     - keycloak-network
 
-  postgres:
-    image: postgres:13
-    environment:
-      POSTGRES_DB: keycloak
-      POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - keycloak-network
+  # postgres:
+  #   image: postgres:13
+  #   environment:
+  #     POSTGRES_DB: keycloak
+  #     POSTGRES_USER: keycloak
+  #     POSTGRES_PASSWORD: password
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - keycloak-network
 
   # zookeeper:
   #   image: bitnami/zookeeper:latest
@@ -56,21 +56,29 @@ services:
   #   volumes:
   #     - kafka_data:/bitnami/kafka
 
-  postgresdb:
-    image: postgres:13
-    environment:
-      POSTGRES_DB: userdb
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
-    ports:
-      - "5433:5432"
+  # postgresdb:
+  #   image: postgres:13
+  #   environment:
+  #     POSTGRES_DB: userdb
+  #     POSTGRES_USER: user
+  #     POSTGRES_PASSWORD: pass
+  #   ports:
+  #     - "5433:5432"
 
 # volumes:
 #   kafka_data:
 
-networks:
-  keycloak-network:
-    driver: bridge
+# networks:
+#   keycloak-network:
+#     driver: bridge
 
+# volumes:
+#   postgres_data:
+  mongo:
+    image: mongo:5
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
 volumes:
-  postgres_data:
+  mongodb_data:
