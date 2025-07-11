@@ -1,0 +1,4 @@
+redis-cli -h redis -p 6379
+
+
+kubectl exec -it redis-client -- redis-cli -h redis

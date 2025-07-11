@@ -1,0 +1,6 @@
+kubectl apply -f kafka-client.yaml -n kafka
+kubectl exec -it kafka-client -n kafka -- bash
+
+kafka-console-producer.sh \
+  --broker-list my-kafka-cluster-kafka-bootstrap:9092 \
+  --topic test

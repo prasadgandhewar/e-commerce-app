@@ -1,0 +1,8 @@
+From inside the cluster:
+
+psql -h postgres -p 5433 -U myuser -d mydb
+
+
+From outside the cluster (if using LoadBalancer):
+
+psql -h <EXTERNAL_IP> -p 5433 -U myuser -d mydb

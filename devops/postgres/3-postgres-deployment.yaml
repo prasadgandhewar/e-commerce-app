@@ -1,0 +1,46 @@
+# postgres-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresdb
+  template:
+    metadata:
+      labels:
+        app: postgresdb
+    spec:
+      containers:
+        - name: postgres-db
+          image: postgres:16
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: postgres-db-secret
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresqldb/data
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-db-pvc
+
+---
+
+# postgres-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresdb
+spec:
+  selector:
+    app: postgresdb
+  ports:
+    - name: postgresdb
+      port: 5433           # Port exposed to other services
+      targetPort: 5432     # Actual port inside the container
+  type: ClusterIP
