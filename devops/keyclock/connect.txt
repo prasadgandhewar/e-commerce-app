@@ -1,1 +1,16 @@
 kubectl port-forward svc/keycloak 8086:8085
+
+kubectl port-forward svc/eureka-server 8762:8761
+
+kubectl port-forward svc/postgresdb 5430:5433
+
+kubectl port-forward svc/user-service 8000:8000
+
+kubectl port-forward svc/order-service 8200:8200
+
+kubectl port-forward svc/gateway-service 8400:8400
+
+
+kubectl port-forward svc/gateway-service 8400:8400
+
+kubectl port-forward svc/keyclock 8085:8085

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: config-server
+  name: config-server
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-server
+  template:
+    metadata:
+      labels:
+        app: config-server
+    spec:
+      containers:
+        - image: prasadg2911/config-server:latest
+          imagePullPolicy: IfNotPresent
+          name: config-server-container
+          env: 
+            - name: EUREKA_URL
+              value: http://eureka-server:8761/eureka/
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: config-server
+  name: config-service
+  namespace: default
+spec:
+  ports:
+    - name: config
+      port: 8500
+      targetPort: 8500
+  selector:
+    app: config-server
+  type: ClusterIP
+

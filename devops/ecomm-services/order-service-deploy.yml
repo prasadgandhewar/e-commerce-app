@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: order-service
+  name: order-service
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+    spec:
+      containers:
+        - image: prasadg2911/order-service:latest
+          imagePullPolicy: IfNotPresent
+          name: order-service-container
+          env: 
+            - name: EUREKA_URL
+              value: http://eureka-server:8761/eureka/
+            - name: CONFIG_SERVER_URL
+              value: http://config-service:8500
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: order-service
+  name: order-service
+  namespace: default
+spec:
+  ports:
+    - name: config
+      port: 8200
+      targetPort: 8200
+  selector:
+    app: order-service
+  type: ClusterIP
+
