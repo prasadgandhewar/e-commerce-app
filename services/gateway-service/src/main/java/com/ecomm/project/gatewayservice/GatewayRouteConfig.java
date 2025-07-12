@@ -11,9 +11,9 @@ public class GatewayRouteConfig {
     @Bean
     public RouteLocator gatewayRouter(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route(p -> p.path("/orders/**").uri("lb://order-service"))
-                .route(p -> p.path("/users/**").uri("lb://user-service"))
-                .route(p -> p.path("/products/**").uri("lb://product-service"))
+                .route(p -> p.path("/orders/**").uri("http://order-service:8200"))
+                .route(p -> p.path("/users/**").uri("http://user-service:8000"))
+                .route(p -> p.path("/products/**").uri("http://product-service:8300"))
                 .build();
     }
 }

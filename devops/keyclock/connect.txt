@@ -1,3 +1,6 @@
+kubectl rollout restart deployment gateway-service
+
+
 kubectl port-forward svc/keycloak 8086:8085
 
 kubectl port-forward svc/eureka-server 8762:8761
@@ -14,3 +17,7 @@ kubectl port-forward svc/gateway-service 8400:8400
 kubectl port-forward svc/gateway-service 8400:8400
 
 kubectl port-forward svc/keyclock 8085:8085
+
+kubectl exec -it gateway-service-6676d4b7cf-qsp8p -- curl http://keycloak:8085/realms/microservices-realm/.well-known/openid-configuration
+
+kubectl exec -it gateway-service-6676d4b7cf-qsp8p -- wget http://keycloak:8085

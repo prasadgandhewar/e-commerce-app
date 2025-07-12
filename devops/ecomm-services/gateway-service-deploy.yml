@@ -16,8 +16,8 @@ spec:
         app: gateway-service
     spec:
       containers:
-        - image: prasadg2911/gateway-service:latest
-          imagePullPolicy: IfNotPresent
+        - image: prasadg2911/gateway-service:v7
+          imagePullPolicy: Always
           name: gateway-service-container
           env: 
             - name: EUREKA_URL
@@ -41,5 +41,5 @@ spec:
       targetPort: 8400
   selector:
     app: gateway-service
-  type: ClusterIP
+  type: LoadBalancer
 
