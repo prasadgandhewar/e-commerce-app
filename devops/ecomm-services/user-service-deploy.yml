@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - image: prasadg2911/user-service:v1
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: user-service-container
           env: 
             - name: EUREKA_URL

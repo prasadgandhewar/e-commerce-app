@@ -1,0 +1,4 @@
+for i in {1..15}; do
+  curl -X POST http://34.10.43.90:8400/auth/token &
+done
+wait

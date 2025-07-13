@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - image: prasadg2911/eureka-server:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: eureka-server-container
 
 

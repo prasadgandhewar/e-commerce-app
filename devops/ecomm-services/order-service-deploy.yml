@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - image: prasadg2911/order-service:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: order-service-container
           env: 
             - name: EUREKA_URL

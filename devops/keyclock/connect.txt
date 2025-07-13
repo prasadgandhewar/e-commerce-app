@@ -21,3 +21,13 @@ kubectl port-forward svc/keyclock 8085:8085
 kubectl exec -it gateway-service-6676d4b7cf-qsp8p -- curl http://keycloak:8085/realms/microservices-realm/.well-known/openid-configuration
 
 kubectl exec -it gateway-service-6676d4b7cf-qsp8p -- wget http://keycloak:8085
+
+kubectl exec -it gateway-service-799484487c-w77hw  -- ping redis
+
+apt-get update && apt-get install -y curl
+kubectl exec -it <gateway-pod> -- sh
+# then in the pod:
+nc -zv redis 6379
+
+Set-ExecutionPolicy RemoteSigned -Scope Process
+.\rate_limit_test.ps1

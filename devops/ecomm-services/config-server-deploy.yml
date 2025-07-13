@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - image: prasadg2911/config-server:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: config-server-container
           env: 
             - name: EUREKA_URL

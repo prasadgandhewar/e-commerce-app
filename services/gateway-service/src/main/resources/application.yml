@@ -4,8 +4,11 @@ keycloak:
   auth-server-url: http://keycloak:8085
   realm: microservices-realm
   client-id: microservice-auth
-  client-secret: ZBmO01ZhDpeC3hMb9TLWis5koJSciOl8
+  client-secret: ${KEYCLOAK_CLIENT_SECRET}
 spring:
+  redis:
+    host: redis         # Kubernetes Redis service name
+    port: 6379
   application:
     name: gateway-service
   security:
@@ -30,6 +33,16 @@ spring:
           uri: http://product-service:8300 #Product
           predicates:
             - Path=/products/**
+        - id: auth-token-api
+          uri: forward:/auth/token #http://localhost:8400
+          predicates:
+            - Path=/auth/token
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 1       # 5 requests/sec
+                redis-rate-limiter.burstCapacity: 10      # burst up to 10
+                key-resolver: "#{@ipKeyResolver}"
 management:
   endpoints:
     web:
@@ -38,6 +51,7 @@ management:
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
+
 #  instance:
 #    prefer-ip-address: true
 #    ip-address: 127.0.0.1
