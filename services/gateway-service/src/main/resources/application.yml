@@ -1,10 +1,10 @@
 server:
   port: 8400
 keycloak:
-  auth-server-url: http://keycloak:8085
-  realm: microservices-realm
-  client-id: microservice-auth
-  client-secret: ${KEYCLOAK_CLIENT_SECRET}
+  auth-server-url: http://${KEYCLOAK_HOST:localhost}:8085
+  realm: ${KEYCLOAK_REALM:microservices-realm}
+  client-id: ${KEYCLOAK_CLIENT_ID:microservice-auth}
+  client-secret: ${KEYCLOAK_CLIENT_SECRET:4aZFLYMeRdj4K1IhD7Ify0wjOiMukETk}
 spring:
   redis:
     host: redis         # Kubernetes Redis service name
@@ -15,22 +15,22 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8085/realms/microservices-realm
+          issuer-uri: http://${KEYCLOAK_HOST:localhost}:8085/realms/${KEYCLOAK_REALM:microservices-realm}
   main:
     allow-bean-definition-overriding: true
   cloud:
     gateway:
       routes:
         - id: user-service
-          uri: http://user-service:8000 #User
+          uri: http://${USER_SERVICE_NAME:localhost}:8000 #User
           predicates:
             - Path=/users/**
         - id: order-service
-          uri: http://order-service:8200 #Order
+          uri: http://${ORDER_SERVICE_NAME:localhost}:8200 #Order
           predicates:
             - Path=/orders/**
         - id: product-service
-          uri: http://product-service:8300 #Product
+          uri: http://${PRODUCT_SERVICE_NAME:localhost}:8300 #Product
           predicates:
             - Path=/products/**
         - id: auth-token-api

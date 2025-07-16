@@ -24,6 +24,9 @@ spec:
               value: http://eureka-server:8761/eureka/
             - name: CONFIG_SERVER_URL
               value: http://config-service:8500
+          envFrom:
+            - secretRef:
+                name: generic-secret
 
 
 ---
