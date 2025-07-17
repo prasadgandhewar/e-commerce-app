@@ -16,7 +16,7 @@ spec:
         app: order-service
     spec:
       containers:
-        - image: prasadg2911/order-service:latest
+        - image: prasadg2911/order-service:v3
           imagePullPolicy: Always
           name: order-service-container
           env: 

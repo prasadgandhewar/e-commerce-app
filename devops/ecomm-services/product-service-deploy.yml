@@ -16,7 +16,7 @@ spec:
         app: product-service
     spec:
       containers:
-        - image: prasadg2911/product-service:v1
+        - image: prasadg2911/product-service:v2
           imagePullPolicy: Always
           name: product-service-container
           env: 

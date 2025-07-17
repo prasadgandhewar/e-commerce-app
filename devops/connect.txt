@@ -1,5 +1,7 @@
-kubectl rollout restart deployment gateway-service
+gcloud container clusters get-credentials ecomm-cluster --region us-central1 --project silken-facet-462711-v4
 
+kubectl rollout restart deployment gateway-service
+kubectl rollout restart deployment order-service
 
 kubectl port-forward svc/keycloak 8086:8085
 
@@ -13,6 +15,7 @@ kubectl port-forward svc/order-service 8200:8200
 
 kubectl port-forward svc/gateway-service 8400:8400
 
+kubectl port-forward svc/product-service 8300:8300
 
 kubectl port-forward svc/gateway-service 8400:8400
 

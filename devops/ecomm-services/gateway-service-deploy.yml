@@ -16,7 +16,7 @@ spec:
         app: gateway-service
     spec:
       containers:
-        - image: prasadg2911/gateway-service:v10
+        - image: prasadg2911/gateway-service:v11
           imagePullPolicy: Always
           name: gateway-service-container
           env: 
