@@ -9,19 +9,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "users_table")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotNull
+    private String keycloakUserId;
     private String name;
     @Email
     private String email;
+    @Embedded
+    private PhoneNumber phone;
+    @Embedded
+    private Address address;
+    private Date dob;
+    private String username;
 }
