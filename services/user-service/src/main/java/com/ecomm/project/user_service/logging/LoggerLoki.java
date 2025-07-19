@@ -24,8 +24,6 @@ public class LoggerLoki {
 
     public void log(String message) {
 
-
-
         Map<String, Object> stream = new HashMap<>();
         stream.put("job", "e-commerce-app");
 

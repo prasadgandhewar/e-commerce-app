@@ -1,4 +1,4 @@
-package com.ecomm.project.user_service.cacheing;
+package com.ecomm.project.user_service.caching;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.beans.factory.annotation.Qualifier;
