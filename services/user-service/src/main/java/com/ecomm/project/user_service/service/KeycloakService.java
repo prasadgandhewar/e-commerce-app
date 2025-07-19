@@ -1,5 +1,6 @@
 package com.ecomm.project.user_service.service;
 
+import com.ecomm.project.user_service.logging.Loggable;
 import com.ecomm.project.user_service.models.KeycloakUser;
 import com.ecomm.project.user_service.models.RegistrationRequest;
 import com.ecomm.project.user_service.utils.Constants;
@@ -17,6 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Service
+@Loggable
 public class KeycloakService {
 
     @Value("${keycloak.auth-server-url}")

@@ -1,4 +1,4 @@
-services:
+#services:
   # keycloak:
   #   image: quay.io/keycloak/keycloak:26.2.5
   #   environment:
@@ -74,11 +74,38 @@ services:
 
 # volumes:
 #   postgres_data:
-  mongo:
-    image: mongo:5
+#   mongo:
+#     image: mongo:5
+#     ports:
+#       - "27017:27017"
+#     volumes:
+#       - mongodb_data:/data/db
+# volumes:
+#   mongodb_data:
+
+version: '3'
+
+services:
+  loki:
+    image: grafana/loki:2.9.2
     ports:
-      - "27017:27017"
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+
+  promtail:
+    image: grafana/promtail:2.9.2
     volumes:
-      - mongodb_data:/data/db
-volumes:
-  mongodb_data:
+      - ./promtail-config.yml:/etc/promtail/promtail.yaml
+      - /var/log:/var/log
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /etc/machine-id:/etc/machine-id:ro
+    command: -config.file=/etc/promtail/promtail.yaml
+
+  grafana:
+    image: grafana/grafana:10.2.0
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - loki

@@ -1,6 +1,7 @@
 package com.ecomm.project.user_service.service;
 
 import com.ecomm.project.user_service.exceptions.UserAlreadyExistsException;
+import com.ecomm.project.user_service.logging.Loggable;
 import com.ecomm.project.user_service.models.RegistrationRequest;
 import com.ecomm.project.user_service.models.User;
 import com.ecomm.project.user_service.repository.UserRepository;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
+@Loggable
 public class RegistrationService {
 
     @Autowired
