@@ -1,6 +1,8 @@
 package com.ecomm.project.user_service.service;
 
+import com.ecomm.project.user_service.models.KeycloakUser;
 import com.ecomm.project.user_service.models.RegistrationRequest;
+import com.ecomm.project.user_service.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -53,8 +55,27 @@ public class KeycloakService {
         }
     }
 
+    public Boolean checkIfUserExists(RegistrationRequest requestDto, String token) {
+        String getUserUrl = keycloakUrl + "/admin/realms/" + realm + "/users?email=" + requestDto.getEmail();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<KeycloakUser[]> response = restTemplate.exchange(
+                getUserUrl,
+                HttpMethod.GET,
+                entity,
+                KeycloakUser[].class);
+        return response.getBody() != null && response.getBody().length > 0;
+    }
+
     public String registerUserInKeycloak(RegistrationRequest requestDto) {
         String token = getAdminAccessToken();
+        Boolean userExists = checkIfUserExists(requestDto, token);
+        if (userExists) {
+            return Constants.USER_EXISTS;
+        }
         String createUserUrl = keycloakUrl + "/admin/realms/" + realm + "/users";
 
         HttpHeaders headers = new HttpHeaders();
