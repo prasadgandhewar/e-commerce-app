@@ -2,6 +2,7 @@ package com.ecomm.project.user_service.service;
 
 import com.ecomm.project.user_service.logging.Loggable;
 import com.ecomm.project.user_service.models.KeycloakUser;
+import com.ecomm.project.user_service.models.LoginRequest;
 import com.ecomm.project.user_service.models.RegistrationRequest;
 import com.ecomm.project.user_service.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @Loggable
@@ -37,15 +35,16 @@ public class KeycloakService {
     private RestTemplate restTemplate;
 
     public String getAdminAccessToken() {
-        String tokenUrl = keycloakUrl + "/realms/" + realm + "/protocol/openid-connect/token";
+        String tokenUrl = keycloakUrl + "/realms/master/protocol/openid-connect/token";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "client_credentials");
-        params.add("client_id", clientId);
-        params.add("client_secret", clientSecret);
+        params.add("grant_type", "password");
+        params.add("client_id", "admin-cli");
+        params.add("username", "admin");
+        params.add("password", "admin");
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
         ResponseEntity<Map> response = restTemplate.postForEntity(tokenUrl, request, Map.class);
@@ -55,6 +54,47 @@ public class KeycloakService {
         } else {
             throw new RuntimeException("Failed to obtain Keycloak admin token");
         }
+    }
+
+    // password, client-credentials, AuthorizationCode, Implicit, DeviceCode, RefreshToken
+    public String getUserAccessToken(LoginRequest requestDto) {
+        String tokenUrl = keycloakUrl + "/realms/" + realm + "/protocol/openid-connect/token";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "password");
+        params.add("client_id", clientId);
+        params.add("username", requestDto.getUsername());
+        params.add("password", requestDto.getPassword());
+        params.add("client_secret", clientSecret);
+        params.add("scope", "openid profile email");
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+        ResponseEntity<Map> response = restTemplate.postForEntity(tokenUrl, request, Map.class);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return response.getBody().get("access_token").toString();
+        } else {
+            throw new RuntimeException("Failed to login");
+        }
+    }
+
+    public Object getUserInfo(LoginRequest requestDto) {
+        String userToken = getUserAccessToken(requestDto);
+        System.out.println("Usertoken - " + userToken);
+        String getUserUrl = keycloakUrl + "/realms/" + realm + "/protocol/openid-connect/userinfo";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(userToken);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<Object> response = restTemplate.exchange(
+                getUserUrl,
+                HttpMethod.GET,
+                entity,
+                Object.class);
+        return response.getBody();
+
     }
 
     public Boolean checkIfUserExists(RegistrationRequest requestDto, String token) {
@@ -88,6 +128,10 @@ public class KeycloakService {
         user.put("username", requestDto.getEmail());
         user.put("email", requestDto.getEmail());
         user.put("enabled", true);
+        user.put("emailVerified", true);
+//        user.put("firstName", "Prasad");
+//        user.put("lastName", "Gbd");
+        //user.put("requiredActions", Collections.emptyList());
         user.put("credentials", List.of(Map.of(
                 "type", "password",
                 "value", requestDto.getPassword(),
